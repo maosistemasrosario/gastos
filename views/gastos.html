@@ -3,10 +3,6 @@
 		<span class="glyphicon glyphicon-plus"></span>
 		Agregar un Gasto
 	</a>
-	<ul class="list-group">
-		<li ng-repeat="gasto in gastos | orderBy: 'nombre'" class="list-group-item text-center clearfix">
-			<gasto-item></gasto-item>
-		</li>
-	</ul>
-	
+	<gasto-table></gasto-table>
+		
 </div>
