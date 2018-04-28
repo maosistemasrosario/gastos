@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="gastosApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Gastos</title>
+	<!-- Bootstraps -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body ng-controller="homeController">
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<span class="glyphicon glyphicon-piggy-bank" style="color:green">
+					</span>
+					{{titulo}}
+				</a>
+			</div>
+		</div>
+	</nav>
+	<div class="container" ng-view>
+	</div>
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/angular-route.min.js"></script>
+	<script src="lib/jquery-3.3.1.min.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/gastosController.js"></script>
+	
+</body>
+</html>
