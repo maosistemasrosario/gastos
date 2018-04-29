@@ -8,17 +8,27 @@ gastosControllerModule.service("gastoService", function($http) {
 
 	$http.get("data/gastos.json")
 	.success(function(data) {
-		for (var i=0;i<data.length;i++) {
-			var item = data[i];
+		for (var i=0;i<data.detalle.length;i++) {
+			var item = data.detalle[i];
 			var n = {
 				id:item.id,
 				fecha: new Date(item.fecha),
 				concepto: item.concepto,
 				tipo: item.tipo,
-				importe: item.importe
+				egreso: item.tipo=='Egreso'?item.importe:null,
+				ingreso: item.tipo=='Ingreso'?item.importe:null,
 			}
 			gastoService.gastos.push(n);	
 		}
+		var total = {
+			id:null,
+			fecha: new Date(),
+			concepto:"Totales",
+			tipo:"Total",
+			egreso:data.totalEgresos,
+			ingreso:data.totalIngresos
+		};
+		gastoService.gastos.push(total);
 	})
 	.error(function(data, status) {
 		var error = {id:null,concepto:"Ocurrió un error al consultar los gastos. Status: "+status};
@@ -32,5 +42,25 @@ gastosControllerModule.service("gastoService", function($http) {
 gastosControllerModule.controller("gastosController", ["$scope", "gastoService", function($scope, gastoService) {
 	$scope.gastos = gastoService.gastos;
 	$scope.timezone = "-0000"; //Para que no haga conversión sino que tome la fecha tal cual viene del json
+	$scope.anio = (new Date()).getFullYear();
+	$scope.anios = [];
+	for (var i=0;i<120;i++) { //Hasta 120 años
+		$scope.anios.push($scope.anio-i);
+	}
+	$scope.mes = 4;
+	$scope.meses = [
+		{value:1,name:"Enero"},
+		{value:2,name:"Febrero"},
+		{value:3,name:"Marzo"},
+		{value:4,name:"Abril"},
+		{value:5,name:"Mayo"},
+		{value:6,name:"Junio"},
+		{value:7,name:"Julio"},
+		{value:8,name:"Agosto"},
+		{value:9,name:"Septiembre"},
+		{value:10,name:"Octubre"},
+		{value:11,name:"Noviembre"},
+		{value:12,name:"Diciembre"}
+	];
 	$scope.$watch(function() {return gastoService.gastos}, function(gastos) {$scope.gastos = gastos});
 }]);

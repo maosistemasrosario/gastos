@@ -1,5 +1,5 @@
 <table class="table table-bordered">
-	<tr>
+	<tr class="active">
 		<th>Fecha</th>
 		<th>Concepto</th>
 		<th>Egreso</th>
@@ -8,7 +8,7 @@
 	</tr>
 	
 
-	<tr ng-repeat="gasto in gastos | orderBy: 'fecha'" >
+	<tr ng-repeat="gasto in gastos | orderBy: 'fecha'" ng-class="gasto.tipo=='Total'?'success':''">
 	<td class="col-md-1">
 		<span style="font-weight: bold">{{gasto.fecha | date:'dd/MM/yyyy':timezone}}</span>
 	</td>
@@ -16,16 +16,16 @@
 		<span style="font-weight: bold">{{gasto.concepto | uppercase}}</span>	
 	</td>
 	<td class="col-md-1">
-		<span style="font-weight: bold">{{gasto.importe | uppercase}}</span>	
+		<span style="font-weight: bold">{{gasto.egreso | currency:$:2}}</span>	
 	</td>
 	<td class="col-md-1">
-		
+		<span style="font-weight: bold">{{gasto.ingreso | currency:$:2}}</span>	
 	</td>
 	<td class="col-md-1">
-		<button type="button" class="btn btn-sm btn-default pull-right" ng-click="eliminarGastos(gasto)">
+		<button type="button" class="btn btn-sm btn-default pull-right" ng-show="gasto.tipo!='Total'" ng-click="eliminarGastos(gasto)">
 			<span class="glyphicon glyphicon-remove"></span>
 		</button>
-		<a href="#/gasto/edit/{{gasto.id}}/" class="btn btn-sm btn-default pull-right">
+		<a href="#/gasto/edit/{{gasto.id}}/" class="btn btn-sm btn-default pull-right" ng-show="gasto.tipo!='Total'">
 			<span class="glyphicon glyphicon-pencil"></span>
 		</a>
 	</td>
