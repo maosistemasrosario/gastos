@@ -22,6 +22,10 @@ app.config(function($routeProvider) {
 			templateUrl:"views/gastos.html",
 			controller: "gastosController"
 		})
+		.when("/gasto/nuevo", {
+			templateUrl:"views/gasto.html",
+			controller: "gastosController"
+		})
 		.otherwise({
 			redirectTo: "/"
 		});

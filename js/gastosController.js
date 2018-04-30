@@ -35,12 +35,34 @@ gastosControllerModule.service("gastoService", function($http) {
 		gastoService.gastos.push(error);
 	});
 
+	gastoService.agregarGasto = function(gasto) {
+		$http.post("data/nuevoGasto.json", gasto)
+		.success(function(data) {
+			//var nuevo = {id: conceptoService.getNuevoId(), nombre: nombre};
+			var nuevo = {
+				id:data.nuevoId,
+				fecha: new Date(),
+				concepto: gasto.concepto.nombre,
+				tipo: gasto.tipo,
+				egreso: gasto.tipo=='Egreso'?gasto.importe:null,
+				ingreso: gasto.tipo=='Ingreso'?gasto.importe:null,
+			}
+			conceptoService.gastos.push(nuevo);
+		})
+		.error(function(data, status) {
+			return "Error al agregar el gasto";
+		}); 
+		
+	};
+
 	return gastoService;
 
 });
 
-gastosControllerModule.controller("gastosController", ["$scope", "gastoService", function($scope, gastoService) {
+gastosControllerModule.controller("gastosController", ["$scope", "gastoService", "conceptoService", function($scope, gastoService, conceptoService) {
 	$scope.gastos = gastoService.gastos;
+	$scope.conceptos = conceptoService.conceptos;
+	$scope.tipos = ["Egreso", "Ingreso"];
 	$scope.timezone = "-0000"; //Para que no haga conversión sino que tome la fecha tal cual viene del json
 	$scope.anio = (new Date()).getFullYear();
 	$scope.anios = [];
@@ -62,5 +84,17 @@ gastosControllerModule.controller("gastosController", ["$scope", "gastoService",
 		{value:11,name:"Noviembre"},
 		{value:12,name:"Diciembre"}
 	];
+
+	$scope.guardarGasto = function() {
+		if ($scope.current.id) {
+			
+		} else {
+			var error = gastoService.agregarGasto($scope.current);
+			if (error) alert(error);
+		}
+		$location.path("/gastos");
+	}
+
 	$scope.$watch(function() {return gastoService.gastos}, function(gastos) {$scope.gastos = gastos});
+	$scope.$watch(function() {return conceptoService.conceptos}, function(conceptos) {$scope.conceptos = conceptos});
 }]);
