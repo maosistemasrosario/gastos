@@ -3,8 +3,21 @@ var gastosControllerModule = angular.module("gastosControllerModule", [])
 gastosControllerModule.service("gastoService", function($http) {
 
 	var gastoService = {};
+	
+	gastoService.getClientTimezone = function() {
+		var split = new Date().toString().split(" ");
+		var timeZone = split[split.length - 4].substring(3);
+		return timeZone;		
+	}
+
+	gastoService.timezone = gastoService.getClientTimezone();
 
 	gastoService.gastos = [];
+
+	gastoService.getFechaWithTimezone = function(stringFecha) {
+		var d = new Date(stringFecha+"T00:00:00"+gastoService.timezone);
+		return d;
+	}
 
 	$http.get("data/gastos.json")
 	.success(function(data) {
@@ -12,7 +25,7 @@ gastosControllerModule.service("gastoService", function($http) {
 			var item = data.detalle[i];
 			var n = {
 				id:item.id,
-				fecha: new Date(item.fecha),
+				fecha: gastoService.getFechaWithTimezone(item.fecha),
 				concepto: item.concepto,
 				tipo: item.tipo,
 				egreso: item.tipo=='Egreso'?item.importe:null,
@@ -88,6 +101,20 @@ gastosControllerModule.service("gastoService", function($http) {
 		}
 	};
 
+	gastoService.eliminarGasto = function(gasto) {
+		$http.post("data/gastoEliminado.json",gasto)
+		.success(function(data) {
+			if (!data.error) {
+				var index = gastoService.gastos.indexOf(gasto);
+				gastoService.gastos.splice(index, 1);
+			} else {
+				return data.mensaje;
+			}
+		})
+		.error(function(data,status) {
+			return "Ocurrió un error al intentar eliminar. Status: "+status;
+		});
+	}
 
 	return gastoService;
 
@@ -115,7 +142,6 @@ gastosControllerModule.controller("gastosController", ["$scope", "$routeParams",
 	}
 
 	$scope.tipos = ["Egreso", "Ingreso"];
-	$scope.timezone = "-0000"; //Para que no haga conversión sino que tome la fecha tal cual viene del json
 	$scope.anio = (new Date()).getFullYear();
 	$scope.anios = [];
 	for (var i=0;i<120;i++) { //Hasta 120 años
@@ -146,6 +172,13 @@ gastosControllerModule.controller("gastosController", ["$scope", "$routeParams",
 		}
 		$location.path("/gastos");
 	}
+
+	$scope.eliminarGasto = function(gasto) {
+		if (confirm('¿Esta seguro que desea eliminar el gasto?')) {
+			gastoService.eliminarGasto(gasto);
+		}
+	}
+
 
 	$scope.$watch(function() {return gastoService.gastos}, function(gastos) {$scope.gastos = gastos});
 	$scope.$watch(function() {return conceptoService.conceptos}, function(conceptos) {$scope.conceptos = conceptos});
