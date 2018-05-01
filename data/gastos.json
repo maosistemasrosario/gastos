@@ -4,35 +4,50 @@
 		{
 			"id":2,
 			"fecha":"2018-04-02",
-			"concepto":"Combustible",
+			"concepto": {
+				"id":5,
+				"nombre":"Combustible"
+			},
 			"tipo":"Egreso",
 			"importe": 600
 		},
 		{
 			"id":1,
 			"fecha":"2018-04-01",
-			"concepto":"Compras Super",
+			"concepto": {
+				"id":2,
+				"nombre":"Compras Super"
+			},
 			"tipo":"Egreso",
 			"importe": 350
 		},
 		{
 			"id":3,
 			"fecha":"2018-04-02",
-			"concepto":"Compras Super",
+			"concepto": {
+				"id":2,
+				"nombre":"Compras Super"
+			},
 			"tipo":"Egreso",
 			"importe": 150
 		},
 		{
 			"id":4,
 			"fecha":"2018-04-05",
-			"concepto":"Plazo Fijo",
+			"concepto": {
+				"id":6,
+				"nombre":"Plazo Fijo"
+			},
 			"tipo":"Ingreso",
 			"importe": 2500
 		},
 		{
 			"id":5,
 			"fecha":"2018-04-29",
-			"concepto":"Expensas",
+			"concepto": {
+				"id":3,
+				"nombre":"Expensas"
+			},
 			"tipo":"Egreso",
 			"importe": 800
 		}

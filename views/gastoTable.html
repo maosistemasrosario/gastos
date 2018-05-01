@@ -13,7 +13,7 @@
 		<span style="font-weight: bold">{{gasto.fecha | date:'dd/MM/yyyy':timezone}}</span>
 	</td>
 	<td class="col-md-8">
-		<span style="font-weight: bold">{{gasto.concepto | uppercase}}</span>	
+		<span style="font-weight: bold">{{gasto.concepto.nombre | uppercase}}</span>	
 	</td>
 	<td class="col-md-1">
 		<span style="font-weight: bold">{{gasto.egreso | currency:$:2}}</span>	
